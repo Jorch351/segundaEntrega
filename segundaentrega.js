@@ -1,85 +1,104 @@
-alert("Esta es una simulación de despegue de una nave. Gracias por participar");
+// Función para agregar un nuevo producto
+function agregarProducto(productos) {
+    let nombre = prompt("Ingrese el nombre del producto:");
+    let precio = parseFloat(prompt("Ingrese el precio del producto:"));
+    let cantidad = parseInt(prompt("Ingrese la cantidad del producto:"));
+    let fecha = prompt("Ingrese la fecha de compra del producto (formato: AAAA-MM-DD):");
 
-let nombre = prompt("¿Cuál es tu nombre?");
-alert("Hola " + nombre);
+    // Validación básica
+    if (!nombre || isNaN(precio) || isNaN(cantidad) || !fecha) {
+        alert("Valor no válido. Por favor, intente de nuevo.");
+        return;
+    }
 
-let actividad = [];
+    // Crear objeto de producto
+    let producto = {
+        nombre: nombre,
+        precio: precio,
+        cantidad: cantidad,
+        fecha: fecha
+    };
 
-function aviso(param1) {
-    let nombre1 = param1;
-    inicio = prompt("Por favor indícanos si empezamos la simulación, vemos el historial o finalizamos " + nombre1 + ". Si/No/Historial/Finalizar");
-    return inicio.toLowerCase();
+    // Agregar el producto al arreglo de productos
+    productos.push(producto);
+
+    alert("Producto agregado con éxito.");
+    console.log(producto);
 }
 
-function despegue(param2) {
-    let reiniciar = true;
+// Función para mostrar todos los productos
+function mostrarProductos(productos) {
+    if (productos.length === 0) {
+        alert("No hay productos registrados.");
+        return;
+    }
 
-    while (reiniciar) {
-        let opcion = aviso(param2);
+    let mensaje = "Productos registrados:\n";
+    productos.forEach((producto, index) => {
+        mensaje += `Producto ${index + 1}:\n`;
+        mensaje += `Nombre: ${producto.nombre}\n`;
+        mensaje += `Precio: $${producto.precio.toFixed(2)}\n`;
+        mensaje += `Cantidad: ${producto.cantidad}\n`;
+        mensaje += `Fecha de compra: ${producto.fecha}\n\n`;
+    });
 
-        switch (opcion) {
-            case "si":
-                for (let i = 10; i >= 1; i--) {
-                    console.log(i);
-                    if (i === 2) {
-                        let abortar = prompt("¿Quieres abortar?");
-                        if (abortar.toLowerCase() === "si") {
-                            alert("Abortamos despegue");
-                            console.log("Abortamos despegue");
-                            actividad.push("Abortó");
-                            break;
-                        } else if (abortar.toLowerCase() === "no") {
-                            continue;
-                        } else {
-                            alert("No se tuvo respuesta");
-                            console.log("No se tuvo respuesta");
-                            i = 10;
-                        }
-                    }
-                    if (i === 1) {
-                        alert("Despegue");
-                        console.log("Despegue");
-                        actividad.push("Despegó");
-                    }
-                }
-                alert("Se va a volver a iniciar la simulación");
-                console.log("Se va a volver a iniciar la simulación");
-                break;
+    alert(mensaje);
+}
 
-            case "no":
-                alert("Gracias");
-                console.log("Gracias");
-                alert("Se va a volver a iniciar la simulación");
-                console.log("Se va a volver a iniciar la simulación");
-                actividad.push("No se inició");
-                break;
+// Función para sumar los valores de productos comprados en la misma fecha
+function sumarValoresPorFecha(productos) {
+    if (productos.length === 0) {
+        alert("No hay productos registrados.");
+        return;
+    }
 
-            case "historial":
-                verActividad();
-                alert("Se va a volver a iniciar la simulación");
-                console.log("Se va a volver a iniciar la simulación");
-                break;
+    let fecha = prompt("Ingrese la fecha para sumar los valores de los productos (formato: AAAA-MM-DD):");
+    let suma = 0;
 
-            case "finalizar":
-                console.log("Se finalizó");
-                reiniciar = false;
-                break;
-
-            default:
-                alert("No se tuvo respuesta válida");
-                console.log("No se tuvo respuesta válida");
-                break;
+    productos.forEach(producto => {
+        if (producto.fecha === fecha) {
+            suma += producto.precio * producto.cantidad;
         }
+    });
+
+    if (suma === 0) {
+        alert(`No se encontraron productos comprados en la fecha: ${fecha}`);
+    } else {
+        alert(`El valor total de los productos comprados el ${fecha} es: $${suma.toFixed(2)}`);
     }
 }
 
-function verActividad() {
-    let mensaje = "Historial de actividades:\n";
-    actividad.forEach((elemento) => {
-        mensaje += "- " + elemento + "\n";
-    });
-    console.log(mensaje);
+// Función principal para manejar el flujo del programa
+function calculadoraDeProductos() {
+    let productos = [];
+    let opcion;
+
+    alert("Este es un simulador de un contador de productos comprados en una ecommerce");
+    do {
+        opcion = prompt("Seleccione una opción:\n1. Agregar producto\n2. Mostrar productos\n3. Salir");
+
+        switch (opcion) {
+            case '1':
+                agregarProducto(productos);
+                break;
+            case '2':
+                mostrarProductos(productos);
+                break;
+            case '3':
+                sumarValoresPorFecha(productos);
+                break;
+            case '4':
+                alert("Saliendo de la calculadora de productos.");
+                break;
+            default:
+                alert("Opción no válida. Por favor, intente de nuevo.");
+        }
+    } while (opcion !== '3');
 }
+
+// Iniciar la calculadora de productos
+calculadoraDeProductos();
+
 
 despegue(nombre);
 
